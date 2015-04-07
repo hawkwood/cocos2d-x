@@ -322,6 +322,8 @@ std::string getUrlStringByFileName(const std::string &fileName) {
     std::string urlString;
     if (fullPath.find(assetsPath) != std::string::npos) {
         urlString = fullPath.replace(fullPath.find_first_of(assetsPath), assetsPath.length(), basePath);
+    }	else if (fullPath.find( "/data/data" ) == 0) {
+		    urlString = std::string( "file://" ) + fullPath;
     } else {
         urlString = fullPath;
     }
