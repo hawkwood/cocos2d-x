@@ -419,6 +419,23 @@ bool FileUtilsApple::removeDirectory(const std::string& path)
         return true;
 }
 
+bool FileUtilsApple::isDirectoryExistInternal(const std::string& dirPath) const
+{
+    std::string fullPath = dirPath;
+
+    if (fullPath[0] != '/') {
+        NSString* fp = [[getBundle() resourcePath] stringByAppendingPathComponent:[NSString stringWithUTF8String:dirPath.c_str()]];
+        fullPath = [fp UTF8String];
+    }
+
+    struct stat st;
+    if (stat(fullPath.c_str(), &st) == 0)
+    {
+        return S_ISDIR(st.st_mode);
+    }
+    return false;
+}
+
 std::string FileUtilsApple::getFullPathForDirectoryAndFilename(const std::string& directory, const std::string& filename) const
 {
     if (directory[0] != '/')
